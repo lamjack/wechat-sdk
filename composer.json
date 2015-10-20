@@ -5,13 +5,13 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "JackLam",
-            "email": "jack@wizmacau.com.com",
-            "homepage": "http://blog.wilead.com"
-        },
-        {
             "name": "WIZ TECHNOLOGY",
             "homepage": "http://wizmacau.com"
+        },
+        {
+            "name": "JackLam",
+            "email": "jack@wizmacau.com",
+            "homepage": "http://blog.wilead.com"
         }
     ],
     "require": {},
