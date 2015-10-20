@@ -1,0 +1,13 @@
+{
+    "name": "wiz/wechat-sdk",
+    "description": "Wechat SDK",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "JackLam",
+            "email": "jack@wizmacau.com"
+        }
+    ],
+    "require": {}
+}
