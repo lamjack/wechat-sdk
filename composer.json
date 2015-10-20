@@ -6,8 +6,23 @@
     "authors": [
         {
             "name": "JackLam",
-            "email": "jack@wizmacau.com"
+            "email": "jack@wizmacau.com.com",
+            "homepage": "http://blog.wilead.com"
+        },
+        {
+            "name": "WIZ TECHNOLOGY",
+            "homepage": "http://wizmacau.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.*-dev"
+        }
+    }
 }
