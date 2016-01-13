@@ -16,6 +16,10 @@ namespace Wiz\Wechat\Payment;
 
 use Symfony\Component\Config\Definition\Processor;
 
+/**
+ * Class Order
+ * @package Wiz\Wechat\Payment
+ */
 class Order
 {
     /**
@@ -28,10 +32,18 @@ class Order
      *
      * @param array $attributes
      */
-    private function __construct(array $attributes)
+    public function __construct(array $attributes)
     {
         $processor = new Processor();
         $processedConfiguration = $processor->processConfiguration(new OrderConfiguration(), ['order' => $attributes]);
         $this->attributes = $processedConfiguration;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 }

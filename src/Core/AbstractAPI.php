@@ -14,6 +14,7 @@
  */
 
 namespace Wiz\Wechat\Core;
+use Wiz\Wechat\Application;
 
 /**
  * Class AbstractAPI
@@ -22,17 +23,17 @@ namespace Wiz\Wechat\Core;
 abstract class AbstractAPI
 {
     /**
-     * @var AccessToken
+     * @var Application
      */
-    protected $accessToken;
+    protected $conatiner;
 
     /**
      * AbstractAPI constructor.
      *
-     * @param AccessToken $accessToken
+     * @param Application $container
      */
-    public function __construct(AccessToken $accessToken)
+    public function __construct(Application $container)
     {
-        $this->accessToken = $accessToken;
+        $this->conatiner = $container;
     }
 }

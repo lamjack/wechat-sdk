@@ -68,6 +68,14 @@ class Http
     }
 
     /**
+     * @return Curl
+     */
+    public function getCurl()
+    {
+        return $this->curl;
+    }
+
+    /**
      * @param string $json
      *
      * @return array

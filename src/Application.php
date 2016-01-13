@@ -14,78 +14,70 @@
  */
 namespace Wiz\Wechat;
 
+use Pimple\Container;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\HttpFoundation\Request;
 use Wiz\Wechat\Core\AccessToken;
 use Wiz\Wechat\Core\Cache\CacheInterface;
-use Wiz\Wechat\Core\Cache\FilesystemCache;
 use Wiz\Wechat\Core\Configuration;
+use Wiz\Wechat\ServiceProviders as Providers;
 
 /**
  * Class Application
  * @package Wiz\Wechat
  */
-class Application
+class Application extends Container
 {
     /**
-     * 配置参数
-     *
      * @var array
      */
-    private $configs;
-
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
-     * @var AccessToken
-     */
-    private $accessToken;
+    protected $providers = [
+        Providers\PaymentServiceProvider::class
+    ];
 
     /**
      * Application constructor
      *
      * @param array $configs
-     * @param CacheInterface|null $cache
+     * @param CacheInterface $cache
      */
-    public function __construct(array $configs, CacheInterface $cache = null)
+    public function __construct(array $configs, CacheInterface $cache)
     {
-        $processor = new Processor();
+        parent::__construct();
 
+        $processor = new Processor();
         $processedConfiguration = $processor->processConfiguration(new Configuration(), ['wechat' => $configs]);
 
-        $this->configs = $processedConfiguration;
-        $this->cache = $cache;
-        $this->accessToken = new AccessToken($this->configs['app_id'], $this->configs['secret'], $this->getCache());
+        $this['configs'] = $processedConfiguration;
+        $this['cache'] = function () use ($cache) {
+            return $cache;
+        };
+
+        $this->registerBase();
+        $this->registerProviders();
     }
 
     /**
-     * @return array
+     * Register base module
      */
-    public function getConfigs()
+    private function registerBase()
     {
-        return $this->configs;
+        $this['request'] = function () {
+            return Request::createFromGlobals();
+        };
+
+        $this['access_token'] = function () {
+            return new AccessToken($this['configs']['app_id'], $this['configs']['secret'], $this['cache']);
+        };
     }
 
     /**
-     * @param bool $forceRefresh 强制刷新
-     *
-     * @return string
+     * Register service providers
      */
-    public function getAccessToken($forceRefresh = false)
+    private function registerProviders()
     {
-        return $this->accessToken->getToken($forceRefresh);
-    }
-
-    /**
-     * @return CacheInterface
-     */
-    protected function getCache()
-    {
-        if (null === $this->cache)
-            $this->cache = new FilesystemCache(sys_get_temp_dir());
-
-        return $this->cache;
+        foreach ($this->providers as $provider) {
+            $this->register(new $provider());
+        }
     }
 }
