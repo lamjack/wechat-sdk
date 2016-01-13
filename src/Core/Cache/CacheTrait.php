@@ -1,12 +1,12 @@
 <?php
 /**
- * FilesystemCache.php
+ * CacheTrait.php
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * @author    jack <linjue@wilead.com>
- * @copyright 2007-2016 WIZ TECHNOLOGY
+ * @copyright 2007-16/1/13 WIZ TECHNOLOGY
  * @link      http://wizmacau.com
  * @link      http://jacklam.it
  * @link      https://github.com/lamjack
@@ -16,41 +16,33 @@
 namespace Wiz\Wechat\Core\Cache;
 
 /**
- * Class FilesystemCache
+ * Class CacheTrait
  * @package Wiz\Wechat\Core\Cache
  */
-class FilesystemCache implements CacheInterface
+trait CacheTrait
 {
-    use CacheTrait;
-
     /**
      * @var string
      */
-    protected $dir;
+    protected $prefix;
 
     /**
-     * FilesystemCache constructor.
+     * 获取 prefix
      *
-     * @param string $dir
+     * @return string
      */
-    public function __construct($dir)
+    public function getPrefix()
     {
-        $this->dir = $dir;
+        return $this->prefix;
     }
 
     /**
-     * {@inheritdoc}
+     * 设置 prefix
+     *
+     * @param string $prefix
      */
-    public function fetch($key)
+    public function setPrefix($prefix)
     {
-        return '';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function save($key, $value, $ttl)
-    {
-
+        $this->prefix = $prefix;
     }
 }

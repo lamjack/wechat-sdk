@@ -18,7 +18,8 @@
         "php": ">=5.3.2",
         "lib-curl": ">=7.10.0",
         "lib-openssl": ">=0.9.6",
-        "pimple/pimple": "~3.0"
+        "pimple/pimple": "~3.0",
+        "symfony/config": "2.8.*"
     },
     "require-dev": {
         "jacklam/php-tools": "dev-master",

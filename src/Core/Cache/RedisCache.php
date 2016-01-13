@@ -15,16 +15,42 @@
 
 namespace Wiz\Wechat\Core\Cache;
 
+/**
+ * Class RedisCache
+ * @package Wiz\Wechat\Core\Cache
+ */
 class RedisCache implements CacheInterface
 {
+    use CacheTrait;
+
+    /**
+     * @var \Redis
+     */
+    private $redis;
+
+    /**
+     * RedisCache constructor.
+     *
+     * @param \Redis $redis
+     */
+    public function __construct(\Redis $redis)
+    {
+        $this->redis = $redis;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function fetch($key)
     {
-        // TODO: Implement fetch() method.
+        return $this->redis->get($key);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function save($key, $value, $ttl)
     {
-        // TODO: Implement save() method.
+        $this->redis->setex($key, $ttl, $value);
     }
-
 }

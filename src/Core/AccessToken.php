@@ -39,12 +39,7 @@ class AccessToken
     protected $secret;
 
     /**
-     * @var string
-     */
-    protected $prefix = 'wiz_wechat.core.access_token.';
-
-    /**
-     * @var CacheInterface|null
+     * @var CacheInterface
      */
     private $cache;
 
@@ -53,21 +48,13 @@ class AccessToken
      *
      * @param string $appId
      * @param string $secret
-     * @param CacheInterface|null $cache
+     * @param CacheInterface $cache
      */
-    public function __construct($appId, $secret, CacheInterface $cache = null)
+    public function __construct($appId, $secret, CacheInterface $cache)
     {
         $this->appId = $appId;
         $this->secret = $secret;
         $this->cache = $cache;
-    }
-
-    /**
-     * @param string $prefix
-     */
-    public function setPrefix($prefix)
-    {
-        $this->prefix = $prefix;
     }
 
     /**
@@ -77,12 +64,12 @@ class AccessToken
      */
     public function getToken($forceRefresh = false)
     {
-        $key = $this->prefix . $this->appId;
-        $token = $this->getCache()->fetch($key);
+        $key = $this->cache->getPrefix() . ':access_token:' . $this->appId;
+        $token = $this->cache->fetch($key);
 
         if ($forceRefresh || !$token) {
             $result = $this->getTokenFromServer();
-            $this->getCache()->save($key, $result['access_token'], $result['expires_in'] - 120);
+            $this->cache->save($key, $result['access_token'], $result['expires_in'] - 120);
             $token = $result['access_token'];
         }
 
@@ -101,16 +88,5 @@ class AccessToken
         ];
 
         return Http::getInstance()->get(self::API_TOKEN_GET, $params);
-    }
-
-    /**
-     * @return CacheInterface
-     */
-    protected function getCache()
-    {
-        if (null === $this->cache) {
-            $this->cache = new FilesystemCache(sys_get_temp_dir());
-        }
-        return $this->cache;
     }
 }
