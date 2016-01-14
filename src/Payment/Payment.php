@@ -110,7 +110,7 @@ class Payment
         $prepayId = $accessor->getValue($unifiedOrderResult, '[prepay_id]');
         $signData = [
             'appId' => $appId,
-            'timeStamp' => time(),
+            'timeStamp' => (string)time(),
             'nonceStr' => Str::randomStr(16),
             'package' => sprintf('prepay_id=%s', $prepayId),
             'signType' => 'MD5'
