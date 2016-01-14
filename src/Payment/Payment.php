@@ -15,8 +15,10 @@
 
 namespace Wiz\Wechat\Payment;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Util\Str;
 use Util\XML;
+use Wiz\Wechat\Core\Helper;
 use Wiz\Wechat\Core\Http;
 use Wiz\Wechat\Exception\ApiException;
 
@@ -27,7 +29,7 @@ use Wiz\Wechat\Exception\ApiException;
 class Payment
 {
     const API_PREPARE_ORDER = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
-    
+
     /**
      * @var string
      */
@@ -84,12 +86,43 @@ class Payment
      */
     public function prepare(Order $order)
     {
-        $xml = XML::build(array_filter($order->getAttributes()));
+        $attr = array_filter($order->getAttributes());
+        $xml = XML::build($attr);
         $response = Http::getInstance()->getCurl()->post(self::API_PREPARE_ORDER, ['xml' => $xml], ['xml' => true]);
         $data = XML::parse($response['data']);
         if ($data['return_code'] == 'SUCCESS') {
             return $data;
         }
         throw new ApiException($data['return_msg']);
+    }
+
+    /**
+     * 获得微信JSAPI支付参数
+     *
+     * @param $unifiedOrderResult
+     *
+     * @return array
+     */
+    public function getJSApiParameters($unifiedOrderResult)
+    {
+        $accessor = PropertyAccess::createPropertyAccessor();
+        $appId = $accessor->getValue($unifiedOrderResult, '[appid]');
+        $prepayId = $accessor->getValue($unifiedOrderResult, '[prepay_id]');
+        $signData = [
+            'appId' => $appId,
+            'timeStamp' => time(),
+            'nonceStr' => Str::randomStr(16),
+            'package' => sprintf('prepay_id=%s', $prepayId),
+            'signType' => 'MD5'
+        ];
+        $sign = Helper::sign($signData, $this->paymentConfigs['key']);
+
+        return [
+            'timestamp' => $signData['timeStamp'],
+            'nonceStr' => $signData['nonceStr'],
+            'package' => $signData['package'],
+            'signType' => $signData['signType'],
+            'paySign' => $sign
+        ];
     }
 }

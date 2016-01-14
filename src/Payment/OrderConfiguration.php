@@ -63,7 +63,7 @@ class OrderConfiguration implements ConfigurationInterface
                 ->end()
                 ->enumNode('fee_type')
                     ->values(array(null, 'CNY'))
-                    ->defaultValue('CNY')
+                    ->defaultNull()
                 ->end()
                 ->integerNode('total_fee')
                     ->isRequired()

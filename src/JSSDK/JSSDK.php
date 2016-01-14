@@ -1,5 +1,4 @@
 <?php
-
 /**
  * JSSDK.php
  *
@@ -15,9 +14,6 @@
  */
 namespace Wiz\Wechat\JSSDK;
 
-use Wiz\Wechat\Core\AbstractAPI;
-
-class JSSDK extends AbstractAPI
+class JSSDK
 {
-
 }
