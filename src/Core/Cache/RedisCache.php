@@ -49,8 +49,11 @@ class RedisCache implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function save($key, $value, $ttl)
+    public function save($key, $value, $ttl = null)
     {
-        $this->redis->setex($key, $ttl, $value);
+        if (null === $ttl)
+            $this->redis->set($key, $value);
+        else
+            $this->redis->setex($key, $ttl, $value);
     }
 }

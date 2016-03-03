@@ -57,7 +57,7 @@ class Http
 
     /**
      * @param string $url
-     * @param array $params
+     * @param array  $params
      *
      * @return array
      */

@@ -24,7 +24,7 @@ abstract class Helper
     /**
      * 获取签名
      *
-     * @param array $data
+     * @param array  $data
      * @param string $key
      *
      * @return string
@@ -40,5 +40,34 @@ abstract class Helper
         $signStr = implode('&', $signArr);
 
         return strtoupper(md5($signStr));
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
+    static public function httpBuildQuery(array $params)
+    {
+        $arr = [];
+        foreach ($params as $k => $v) {
+            array_push($arr, sprintf('%s=%s', $k, $v));
+        }
+        return implode($arr, '&');
+    }
+
+    /**
+     * @param string $url
+     * @param array  $params
+     *
+     * @return string
+     */
+    static public function addQueryParameters($url, array $params)
+    {
+        $parsedUrl = parse_url($url);
+        if (!array_key_exists('path', $parsedUrl))
+            $url .= '/';
+        $separator = (!array_key_exists('query', $parsedUrl)) ? '?' : '&';
+        return $url .= $separator . self::httpBuildQuery($params);
     }
 }

@@ -36,6 +36,7 @@ class Configuration implements ConfigurationInterface
         $this->addBasicNode($rootNode);
         $this->addLogNode($rootNode);
         $this->addPaymentNode($rootNode);
+        $this->addOauthNode($rootNode);
 
         return $treeBuilder;
     }
@@ -65,6 +66,25 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->booleanNode('debug')
                     ->defaultFalse()
+                ->end()
+            ->end();
+    }
+
+    protected function addOauthNode(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('oauth')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->enumNode('scopes')
+                            ->values(array('snsapi_base', 'snsapi_userinfo'))
+                            ->defaultValue('snsapi_base')
+                        ->end()
+                        ->scalarNode('redirect_url')
+                            ->defaultNull()
+                        ->end()
+                    ->end()
                 ->end()
             ->end();
     }

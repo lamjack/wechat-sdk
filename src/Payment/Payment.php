@@ -17,7 +17,6 @@ namespace Wiz\Wechat\Payment;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Util\Str;
-use Util\XML;
 use Wiz\Wechat\Core\Helper;
 use Wiz\Wechat\Core\Http;
 use Wiz\Wechat\Exception\ApiException;
@@ -44,39 +43,12 @@ class Payment
      * Payment constructor.
      *
      * @param string $appId
-     * @param array $paymentConfigs
+     * @param array  $paymentConfigs
      */
     public function __construct($appId, array $paymentConfigs)
     {
         $this->appId = $appId;
         $this->paymentConfigs = $paymentConfigs;
-    }
-
-    /**
-     * @param array $orderAttrs
-     *
-     * @return Order
-     */
-    public function createOrder(array $orderAttrs)
-    {
-        $autoAttrs = [
-            'appid' => $this->appId,
-            'mch_id' => $this->paymentConfigs['mch_id'],
-            'nonce_str' => Str::randomStr(16)
-        ];
-        $orderAttrs = $autoAttrs + $orderAttrs;
-        $orderAttrs = array_filter($orderAttrs);
-
-        // 生成签名
-        ksort($orderAttrs, SORT_STRING);
-        $signArr = [];
-        foreach ($orderAttrs as $k => $v) {
-            $signArr[] = sprintf('%s=%s', $k, $v);
-        }
-        $signArr[] = 'key=' . $this->paymentConfigs['key'];
-        $signStr = implode('&', $signArr);
-        $orderAttrs['sign'] = strtoupper(md5($signStr));
-        return new Order($orderAttrs);
     }
 
     /**
@@ -86,14 +58,7 @@ class Payment
      */
     public function prepare(Order $order)
     {
-        $attr = array_filter($order->getAttributes());
-        $xml = XML::build($attr);
-        $response = Http::getInstance()->getCurl()->post(self::API_PREPARE_ORDER, ['xml' => $xml], ['xml' => true]);
-        $data = XML::parse($response['data']);
-        if ($data['return_code'] == 'SUCCESS') {
-            return $data;
-        }
-        throw new ApiException($data['return_msg']);
+        
     }
 
     /**

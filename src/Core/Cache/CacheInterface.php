@@ -47,11 +47,11 @@ interface CacheInterface
     /**
      * 保存
      *
-     * @param string $key
-     * @param string $value
-     * @param int $ttl
+     * @param string   $key
+     * @param string   $value
+     * @param int|null $ttl
      *
      * @return void
      */
-    public function save($key, $value, $ttl);
+    public function save($key, $value, $ttl = null);
 }
