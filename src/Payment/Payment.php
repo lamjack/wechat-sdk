@@ -15,8 +15,10 @@
 
 namespace Wiz\Wechat\Payment;
 
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Util\Str;
+use Util\XML;
 use Wiz\Wechat\Core\Helper;
 use Wiz\Wechat\Core\Http;
 use Wiz\Wechat\Exception\ApiException;
@@ -52,13 +54,29 @@ class Payment
     }
 
     /**
+     * 统一下单
+     *
      * @param Order $order
      *
      * @return array|\SimpleXMLElement
      */
     public function prepare(Order $order)
     {
-        
+        if ($order->valid()) {
+            $order->set('appid', $this->appId);
+            $order->set('mch_id', $this->paymentConfigs['mch_id']);
+            $order->set('nonce_str', Str::randomStr(32));
+            $signData = array_filter($order->all());
+            $order->set('sign', Helper::sign($signData, $this->paymentConfigs['key']));
+
+            $response = Http::getInstance()->getCurl()->post(API::UNIFIED_ORDER, ['xml' => $order->getXML()], ['xml' => true]);
+            $result = XML::parse($response['data']);
+
+            if ($result['return_code'] === 'FAIL')
+                throw new ApiException($result['return_msg']);
+
+            var_dump($result);
+        }
     }
 
     /**

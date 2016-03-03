@@ -15,35 +15,22 @@
 namespace Wiz\Wechat\Payment;
 
 use Symfony\Component\Config\Definition\Processor;
+use Wiz\Wechat\Core\Attribute;
 
 /**
  * Class Order
  * @package Wiz\Wechat\Payment
  */
-class Order
+class Order extends Attribute
 {
     /**
-     * @var array
+     * {@inheritdoc}
      */
-    protected $attributes;
-
-    /**
-     * Order constructor.
-     *
-     * @param array $attributes
-     */
-    public function __construct(array $attributes)
+    public function valid()
     {
         $processor = new Processor();
-        $processedConfiguration = $processor->processConfiguration(new OrderConfiguration(), ['order' => $attributes]);
-        $this->attributes = $processedConfiguration;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAttributes()
-    {
-        return $this->attributes;
+        $configs = $processor->processConfiguration(new OrderConfiguration(), ['order' => $this->all()]);
+        $this->reset($configs);
+        return true;
     }
 }

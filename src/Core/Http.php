@@ -68,6 +68,20 @@ class Http
     }
 
     /**
+     * @param string $url
+     * @param string $xml
+     *
+     * @return array
+     */
+    public function postXML($url, $xml)
+    {
+        $response = $this->curl->post($url, ['xml' => $xml], ['xml' => true]);
+        var_dump($response['data']);
+        exit();
+        return $this->parseJSON($response['data']);
+    }
+
+    /**
      * @return Curl
      */
     public function getCurl()

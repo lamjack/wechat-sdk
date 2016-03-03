@@ -140,6 +140,8 @@ class OAuth
     }
 
     /**
+     * 根据Code获取当前微信用户信息
+     *
      * @return null|User
      * @throws \Wiz\Wechat\Exception\FaultException
      */
