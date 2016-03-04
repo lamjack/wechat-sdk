@@ -96,6 +96,11 @@ class Application
             new Reference('request')
         ]));
 
+        // Notice
+        $this->container->setDefinition('notice', new Definition(Notice\Notice::class, [
+            new Reference('token')
+        ]));
+
         // OAuth
         $this->container->setDefinition('oauth', new Definition(OAuth\OAuth::class, [
             $configs['app_id'],
