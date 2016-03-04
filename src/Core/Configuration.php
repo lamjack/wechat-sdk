@@ -105,6 +105,9 @@ class Configuration implements ConfigurationInterface
                         ->values(array('debug', 'info', 'notice', 'warning', 'error', 'critical', 'alert', 'emergency'))
                         ->defaultValue('debug')
                     ->end()
+                    ->scalarNode('file')
+                        ->isRequired()
+                    ->end()
                 ->end()
             ->end();
     }

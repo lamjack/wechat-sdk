@@ -22,20 +22,6 @@ namespace Wiz\Wechat\Core\Cache;
 interface CacheInterface
 {
     /**
-     * 获取 prefix
-     *
-     * @return string
-     */
-    public function getPrefix();
-
-    /**
-     * 设置 prefix
-     *
-     * @param string $prefix
-     */
-    public function setPrefix($prefix);
-
-    /**
      * 檢索
      *
      * @param string $key
@@ -54,4 +40,11 @@ interface CacheInterface
      * @return void
      */
     public function save($key, $value, $ttl = null);
+
+    /**
+     * 删除
+     *
+     * @param string $key
+     */
+    public function remove($key);
 }

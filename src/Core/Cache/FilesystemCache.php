@@ -49,8 +49,17 @@ class FilesystemCache implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function save($key, $value, $ttl)
+    public function save($key, $value, $ttl = null)
     {
-
+        // TODO: Implement save() method.
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove($key)
+    {
+        // TODO: Implement remove() method.
+    }
+
 }

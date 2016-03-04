@@ -24,22 +24,45 @@ abstract class Helper
     /**
      * 获取签名
      *
-     * @param array  $data
-     * @param string $key
+     * @param array       $data
+     * @param string|null $key
      *
      * @return string
      */
-    static public function sign(array $data, $key)
+    static public function sign(array $data, $key = null)
     {
         ksort($data, SORT_STRING);
+
         $signArr = [];
         foreach ($data as $k => $v) {
             $signArr[] = sprintf('%s=%s', $k, $v);
         }
-        $signArr[] = 'key=' . $key;
+
+        if (!is_null($key))
+            $signArr[] = 'key=' . $key;
+
         $signStr = implode('&', $signArr);
 
         return strtoupper(md5($signStr));
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return string
+     */
+    static public function jssdkSign(array $data)
+    {
+        ksort($data, SORT_STRING);
+
+        $signArr = [];
+        foreach ($data as $k => $v) {
+            $signArr[] = sprintf('%s=%s', $k, $v);
+        }
+
+        $signStr = implode('&', $signArr);
+
+        return sha1($signStr);
     }
 
     /**

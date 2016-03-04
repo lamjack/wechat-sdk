@@ -43,7 +43,7 @@ class RedisCache implements CacheInterface
      */
     public function fetch($key)
     {
-        return $this->redis->get($key);
+        return $this->redis->get($key) ?: null;
     }
 
     /**
@@ -56,4 +56,14 @@ class RedisCache implements CacheInterface
         else
             $this->redis->setex($key, $ttl, $value);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove($key)
+    {
+        $this->redis->delete($key);
+    }
+
+
 }

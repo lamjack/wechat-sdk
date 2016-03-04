@@ -109,6 +109,18 @@ abstract class Attribute implements ParameterBagInterface
     }
 
     /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function except($name)
+    {
+        unset($this->attributes[$name]);
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function resolve()
