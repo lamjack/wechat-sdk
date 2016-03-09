@@ -15,8 +15,8 @@
 
 namespace Wiz\Wechat\Payment;
 
-use EasyWeChat\Support\XML;
 use Symfony\Component\HttpFoundation\Request;
+use Util\XML;
 use Wiz\Wechat\Core\Attribute;
 use Wiz\Wechat\Core\Helper;
 use Wiz\Wechat\Exception\FaultException;
