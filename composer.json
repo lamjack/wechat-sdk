@@ -31,10 +31,5 @@
         "psr-4": {
             "Wiz\\Wechat\\": "src/"
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.*-dev"
-        }
     }
 }
